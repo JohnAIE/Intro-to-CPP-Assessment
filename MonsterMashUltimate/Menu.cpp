@@ -4,6 +4,7 @@
 
 Menu::Menu()
 {
+	GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
 }
 
 Menu::~Menu()

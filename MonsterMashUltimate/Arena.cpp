@@ -81,8 +81,8 @@ void Arena::creatureBeginTurn(Creature* creature)
 	log("");
 	log("%s's turn has begun", creature->getName().c_str());
 
-	creature->moveTo(m_center.x, m_center.y, 1.5f, easing::quadraticInOut);
-	delayedAction(2.5f, [=]()
+	creature->moveTo(m_center.x, m_center.y, 1.0f, easing::quadraticInOut);
+	delayedAction(1.5f, [=]()
 		{
 			m_state = State::CREATURE_TURN;
 			activeCreature()->makeDecisions(*this, m_creatures);
@@ -98,15 +98,15 @@ void Arena::creatureEndTurn()
 	log("%s's turn has ended", creature->getName().c_str());
 
 	Vector2 pos = m_circlePosition[m_currentTurn];
-	creature->moveTo(pos.x, pos.y, 1.5f, easing::quadraticInOut);
+	creature->moveTo(pos.x, pos.y, 1.0f, easing::quadraticInOut);
 
-	delayedAction(2.5f, [=]()
+	delayedAction(1.5f, [=]()
 		{
 			m_state = State::CREATURE_END_TURN;
 			return true;
 		});
 
-	delayedAction(3.5f, [=]()
+	delayedAction(2.0f, [=]()
 		{
 			nextCreature();
 			return true;
@@ -135,7 +135,7 @@ void Arena::nextCreature()
 		m_currentTurn = (m_currentTurn + 1) % int(m_creatures.size());
 	}
 
-	delayedAction(1.0f, [=]()
+	delayedAction(0.5f, [=]()
 		{
 			if (isLogFinished())
 			{
@@ -175,6 +175,8 @@ void Arena::battleEnded()
 
 void Arena::update(float deltaTime)
 {	
+	deltaTime *= 1 << m_speedMultiplier;
+
 	m_delayedActions.insert(m_delayedActions.end(), m_newDelayedActions.begin(), m_newDelayedActions.end());
 	m_newDelayedActions.clear();
 	for (auto& tween : m_delayedActions)
@@ -197,9 +199,10 @@ void Arena::update(float deltaTime)
 	}
 
 	m_battleLogTimer += deltaTime;
-	if (m_battleLogTimer > 0.01f)
+	
+	while (m_battleLogTimer > 0.01f)
 	{
-		m_battleLogTimer = 0.0f;
+		m_battleLogTimer -= 0.01f;
 		updateBattleLog();
 	}
 }
@@ -296,6 +299,13 @@ void Arena::draw()
 
 	EndScissorMode();
 	
+	const char* speedText = FormatText("x%d", 1 << m_speedMultiplier);
+	const int maxSpeedMultiplier = 5;
+	
+	if (GuiButton(Rectangle{ sw - 100.0f, 50.0f, 75.0f, 75.0f }, speedText))
+	{
+		m_speedMultiplier = (m_speedMultiplier + 1) % maxSpeedMultiplier;
+	}
 }
 
 void Arena::log(const std::string& msg)

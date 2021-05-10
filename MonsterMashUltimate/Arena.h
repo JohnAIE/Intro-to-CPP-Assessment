@@ -81,6 +81,8 @@ private:
 	int m_currentTurn{ 0 };
 	Vector2 m_center;
 
+	int m_speedMultiplier{ 0 };
+
 	std::vector<Creature*> m_creatures;
 	std::vector<Vector2> m_circlePosition;;
 	Vector2 m_battleLogScroll{ 0,0 };
