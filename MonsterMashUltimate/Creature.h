@@ -56,6 +56,10 @@ public:
 	virtual void makeDecisions(Arena& arena, TargetList& targetList) = 0;
 	virtual void draw();
 	virtual void applyDamage(Arena& arena, Creature* attacker, const DamageInfo& info);
+	virtual void onUpdate(float deltaTime) {};
+	virtual void onPreDraw() {};
+	virtual void onPostDraw() {};
+
 
 	const std::string& getName()
 	{
@@ -65,6 +69,11 @@ public:
 	int getHealth()
 	{
 		return m_health;
+	}
+
+	int getMaxHealth()
+	{
+		return m_maxHealth;
 	}
 
 	bool isDead()

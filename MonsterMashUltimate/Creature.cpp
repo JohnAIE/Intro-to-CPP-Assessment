@@ -40,6 +40,8 @@ Creature::~Creature()
 
 void Creature::draw()
 {
+	onPreDraw();
+
 	// Base position
 	int px = m_position.x + m_shakeOffset.x - m_size.x / 2;
 	int py = m_position.y + m_shakeOffset.y - m_size.y / 2;
@@ -84,6 +86,8 @@ void Creature::draw()
 						   (m_size.x - healthbarInset * 2) * healthPercent, 
 						   healthbarHeight - healthbarInset * 2, 
 						   ColorFromHSV({ healthPercent * 90 + 30, 0.9f * saturation, 0.4f }), ColorFromHSV({ healthPercent * 120 + 30, 0.9f * saturation, 0.9f }));
+
+	onPostDraw();
 }
 
 void Creature::applyDamage(Arena& arena, Creature* attacker, const DamageInfo& info)
@@ -102,18 +106,36 @@ void Creature::applyDamage(Arena& arena, Creature* attacker, const DamageInfo& i
 		txt << m_name;
 	}
 
-	txt << " took "
-		<< info.amount << " "
-		<< damageName;
-
-	if (info.element != Element::NONE)
+	if (info.amount >= 0)
 	{
-		txt << " " << elementName;
-	}
+		txt << " took "
+			<< info.amount << " "
+			<< damageName;
 
-	txt
-		<< " damage from "
-		<< attacker->getName();
+		if (info.element != Element::NONE)
+		{
+			txt << " " << elementName;
+		}
+
+		txt
+			<< " damage from "
+			<< attacker->getName();
+	}
+	else
+	{
+		txt << " was healed by "
+			<< -info.amount << " "
+			<< damageName;
+
+		if (info.element != Element::NONE)
+		{
+			txt << " " << elementName;
+		}
+
+		txt
+			<< " anti-damage from "
+			<< attacker->getName();
+	}
 
 	if (m_health > 0 && m_health - info.amount <= 0)
 	{
@@ -129,6 +151,7 @@ void Creature::applyDamage(Arena& arena, Creature* attacker, const DamageInfo& i
 	}
 
 	m_health -= info.amount;
+	if (m_health > m_maxHealth) m_health = m_maxHealth;
 
 	shake(10, 0.5f);
 	flash(Color{ 128, 128, 128 }, 0.5f);
@@ -143,6 +166,8 @@ void Creature::applyDamage(Arena& arena, Creature* attacker, const DamageInfo& i
 
 void Creature::tick(float deltaTime)
 {
+	onUpdate(deltaTime);
+
 	if (m_moveTween.duration() > 0)
 	{
 		auto xy = m_moveTween.step(uint32_t(deltaTime * 1000));
