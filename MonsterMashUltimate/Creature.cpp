@@ -164,9 +164,9 @@ void Creature::applyDamage(Arena& arena, Creature* attacker, const DamageInfo& i
 	arena.log(txt.str());
 }
 
-void Creature::tick(float deltaTime)
+void Creature::tick(Arena& arena, TargetList& targetList, float deltaTime)
 {
-	onUpdate(deltaTime);
+	onUpdate(arena, targetList, deltaTime);
 
 	if (m_moveTween.duration() > 0)
 	{

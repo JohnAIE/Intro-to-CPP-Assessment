@@ -193,7 +193,7 @@ void Arena::update(float deltaTime)
 
 	for (auto& creature : m_creatures)
 	{
-		creature->tick(deltaTime);
+		creature->tick(*this, m_creatures, deltaTime);
 	}
 
 	m_battleLogTimer += deltaTime;

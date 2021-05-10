@@ -52,11 +52,11 @@ public:
 	virtual ~Creature();
 
 	// Called once per frame to update the creature's state
-	void tick(float deltaTime);
+	void tick(Arena& arena, TargetList& targetList, float deltaTime);
 	virtual void makeDecisions(Arena& arena, TargetList& targetList) = 0;
 	virtual void draw();
 	virtual void applyDamage(Arena& arena, Creature* attacker, const DamageInfo& info);
-	virtual void onUpdate(float deltaTime) {};
+	virtual void onUpdate(Arena& arena, TargetList& targetList, float deltaTime) {};
 	virtual void onPreDraw() {};
 	virtual void onPostDraw() {};
 
