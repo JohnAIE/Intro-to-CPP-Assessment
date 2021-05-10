@@ -26,14 +26,14 @@ public:
 	Arena();
 	~Arena();
 
-	void Tick(float deltaTime);
-	void UpdateBattleLog();
-	void Draw();
+	void update(float deltaTime);
+	void updateBattleLog();
+	void draw();
 
-	void Log(const std::string& msg);
+	void log(const std::string& msg);
 
 	template <typename ... Args>
-	void Log(const char* msg, Args&&... args)
+	void log(const char* msg, Args&&... args)
 	{
 		static char buff[1024];		
 		sprintf_s(buff, 1024, msg, std::forward<Args>(args)...);
@@ -43,15 +43,15 @@ public:
 		//m_battleLogStream << buff << std::endl;
 	}
 
-	bool IsLogFinished();
-	void LogScrollToBottom();
+	bool isLogFinished();
+	void logScrollToBottom();
 
-	void CreatureBeginTurn(Creature* creature);
-	void CreatureEndTurn();
-	void NextCreature();
-	void BattleEnded();
+	void creatureBeginTurn(Creature* creature);
+	void creatureEndTurn();
+	void nextCreature();
+	void battleEnded();
 
-	Creature* ActiveCreature()
+	Creature* activeCreature()
 	{
 		auto iter = m_creatures.begin();
 		std::advance(iter, m_currentTurn);
@@ -59,7 +59,7 @@ public:
 	}
 
 	template <typename CallbackT>
-	void DelayedAction(float delay, CallbackT t)
+	void delayedAction(float delay, CallbackT t)
 	{
 		m_newDelayedActions.emplace_back(tweeny::from(0).to(1).during(delay * 1000).onStep([t](auto& tween, int)
 			{

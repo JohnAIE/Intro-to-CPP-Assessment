@@ -35,35 +35,35 @@ Arena::Arena()
 	int count = m_creatures.size();
 	int i = 0;
 
-	Log("Monster Mash Ultimate is about to begin!");
-	Log("");
-	Log("Creatures in this Battle:");
+	log("Monster Mash Ultimate is about to begin!");
+	log("");
+	log("Creatures in this Battle:");
 
 	m_center = Vector2{ sw / 2.0f, 75 + sh / 3.0f };
 
 	for (auto& creature : m_creatures)
 	{
 		float a = PI/2 + float(i) / count * PI * 2;
-		creature->SetPosition(m_center.x + sw/2 * 0.7f * cosf(a), 
+		creature->setPosition(m_center.x + sw/2 * 0.7f * cosf(a), 
 							  m_center.y + sh/2 * 0.5f * sinf(a));
-		m_circlePosition.push_back(creature->GetPosition());
+		m_circlePosition.push_back(creature->getPosition());
 		i++;		
-		Log(creature->GetName());
+		log(creature->getName());
 	}
 
-	DelayedAction(2.0f, [=]()
+	delayedAction(2.0f, [=]()
 		{
-			if (IsLogFinished())
+			if (isLogFinished())
 			{
 				m_state = State::CREATURE_BEGIN_TURN;
-				CreatureBeginTurn(ActiveCreature());
+				creatureBeginTurn(activeCreature());
 				return true;
 			}
 			return false;
 		});
 }
 
-bool Arena::IsLogFinished()
+bool Arena::isLogFinished()
 {
 	return m_battleLogBuffer.empty();
 }
@@ -76,104 +76,104 @@ Arena::~Arena()
 	}
 }
 
-void Arena::CreatureBeginTurn(Creature* creature)
+void Arena::creatureBeginTurn(Creature* creature)
 {
-	Log("");
-	Log("%s's turn has begun", creature->GetName().c_str());
+	log("");
+	log("%s's turn has begun", creature->getName().c_str());
 
-	creature->MoveTo(m_center.x, m_center.y, 1.5f, easing::quadraticInOut);
-	DelayedAction(2.5f, [=]()
+	creature->moveTo(m_center.x, m_center.y, 1.5f, easing::quadraticInOut);
+	delayedAction(2.5f, [=]()
 		{
 			m_state = State::CREATURE_TURN;
-			ActiveCreature()->Update(*this, m_creatures);
+			activeCreature()->makeDecisions(*this, m_creatures);
 			return true;
 		});
 }
 
-void Arena::CreatureEndTurn()
+void Arena::creatureEndTurn()
 {
-	Creature* creature = ActiveCreature();
+	Creature* creature = activeCreature();
 
-	Log("");
-	Log("%s's turn has ended", creature->GetName().c_str());
+	log("");
+	log("%s's turn has ended", creature->getName().c_str());
 
 	Vector2 pos = m_circlePosition[m_currentTurn];
-	creature->MoveTo(pos.x, pos.y, 1.5f, easing::quadraticInOut);
+	creature->moveTo(pos.x, pos.y, 1.5f, easing::quadraticInOut);
 
-	DelayedAction(2.5f, [=]()
+	delayedAction(2.5f, [=]()
 		{
 			m_state = State::CREATURE_END_TURN;
 			return true;
 		});
 
-	DelayedAction(3.5f, [=]()
+	delayedAction(3.5f, [=]()
 		{
-			NextCreature();
+			nextCreature();
 			return true;
 		});
 }
 
-void Arena::NextCreature()
+void Arena::nextCreature()
 {
 	int deadCount = 0;
 	for (Creature* creature : m_creatures)
 	{
-		if (creature->IsDead())
+		if (creature->isDead())
 		{
 			deadCount++;
 			if (deadCount >= m_creatures.size() - 1)
 			{
-				BattleEnded();
+				battleEnded();
 				return;
 			}
 		}
 	}
 
 	m_currentTurn = (m_currentTurn + 1) % int(m_creatures.size());	
-	while (ActiveCreature()->IsDead())
+	while (activeCreature()->isDead())
 	{
 		m_currentTurn = (m_currentTurn + 1) % int(m_creatures.size());
 	}
 
-	DelayedAction(1.0f, [=]()
+	delayedAction(1.0f, [=]()
 		{
-			if (IsLogFinished())
+			if (isLogFinished())
 			{
 				m_state = State::CREATURE_BEGIN_TURN;
-				CreatureBeginTurn(ActiveCreature());
+				creatureBeginTurn(activeCreature());
 				return true;
 			}
 			return false;
 		});
 }
 
-void Arena::BattleEnded()
+void Arena::battleEnded()
 {
 	m_state = State::BATTLE_ENDED;
-	Log("");
-	Log("The Monster Mash is Over!");
+	log("");
+	log("The Monster Mash is Over!");
 
 	int i = 0;
 	for (Creature* creature : m_creatures)
 	{
-		if (!creature->IsDead())
+		if (!creature->isDead())
 		{
-			Log("");
-			Log("**** %s is the Winner ****", creature->GetName().c_str());
-			Log("");
-			creature->MoveTo(m_center.x, m_center.y, 1.5f, easing::quadraticInOut);
+			log("");
+			log("**** %s is the Winner ****", creature->getName().c_str());
+			log("");
+			creature->moveTo(m_center.x, m_center.y, 1.5f, easing::quadraticInOut);
 			return;
 		}
 		i++;
 	}
 
-	Log("");
-	Log("NO ONE WON BECAUSE EVERYONE DIED >.<");
-	Log("");
+	log("");
+	log("NO ONE WON BECAUSE EVERYONE DIED >.<");
+	log("");
 
 }
 
-void Arena::Tick(float deltaTime)
+void Arena::update(float deltaTime)
 {	
 	m_delayedActions.insert(m_delayedActions.end(), m_newDelayedActions.begin(), m_newDelayedActions.end());
 	m_newDelayedActions.clear();
@@ -193,20 +193,20 @@ void Arena::Tick(float deltaTime)
 
 	for (auto& creature : m_creatures)
 	{
-		creature->Tick(deltaTime);
+		creature->tick(deltaTime);
 	}
 
 	m_battleLogTimer += deltaTime;
 	if (m_battleLogTimer > 0.01f)
 	{
 		m_battleLogTimer = 0.0f;
-		UpdateBattleLog();
+		updateBattleLog();
 	}
 }
 
-void Arena::UpdateBattleLog()
+void Arena::updateBattleLog()
 {
-	if (IsLogFinished()) return;
+	if (isLogFinished()) return;
 	char ch = m_battleLogBuffer.front();
 	m_battleLogBuffer.pop();
 
@@ -218,7 +218,7 @@ void Arena::UpdateBattleLog()
 	else if (ch == '\n')
 	{
 		m_battleLogStrings.push_back("");
-		LogScrollToBottom();
+		logScrollToBottom();
 	}
 	else
 	{
@@ -226,12 +226,12 @@ void Arena::UpdateBattleLog()
 	}
 }
 
-void Arena::LogScrollToBottom()
+void Arena::logScrollToBottom()
 {
 	m_battleLogScroll.y = -1000000; // TODO: calculate this properly
 }
 
-void Arena::Draw()
+void Arena::draw()
 {
 	int sw = GetScreenWidth();
 	int sh = GetScreenHeight();
@@ -243,19 +243,19 @@ void Arena::Draw()
 
 	for (auto& creature : m_creatures)
 	{
-		creature->Draw();
+		creature->draw();
 	}
 
 	if (m_state >= State::CREATURE_BEGIN_TURN && m_state <= State::CREATURE_END_TURN)
 	{
-		Creature* creature = ActiveCreature();
+		Creature* creature = activeCreature();
 		if (creature)
 		{
-			auto title = creature->GetName() + "'s Turn";
+			auto title = creature->getName() + "'s Turn";
 			int tw = MeasureText(title.c_str(), 30);				
 			DrawText(title.c_str(), GetScreenWidth() / 2 - tw / 2, 20, 30, WHITE);
 
-			DrawCircle(creature->GetPosition().x, creature->GetPosition().y - creature->GetSize().y/2 - 30, 10 + sinf(GetTime() * 5) * 2, GREEN);
+			DrawCircle(creature->getPosition().x, creature->getPosition().y - creature->getSize().y/2 - 30, 10 + sinf(GetTime() * 5) * 2, GREEN);
 		}
 	}
 
@@ -298,7 +298,7 @@ void Arena::Draw()
 	
 }
 
-void Arena::Log(const std::string& msg)
+void Arena::log(const std::string& msg)
 {
 	for (int i = 0; i < msg.length(); i++)
 		m_battleLogBuffer.push(msg[i]);

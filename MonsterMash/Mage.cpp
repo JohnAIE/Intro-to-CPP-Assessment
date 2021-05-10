@@ -29,19 +29,19 @@ void Mage::Update(TargetList& targetList)
 		switch (attack)
 		{
 		case 0:
-			std::cout << m_name << " shoots " << target->GetName() << " with a fireball...\n";
+			std::cout << m_name << " shoots " << target->getName() << " with a fireball...\n";
 			target->ApplyDamage(this, { rand() % 40 + 10, DamageType::MAGIC, Element::FIRE });
 			break;
 		case 1:
-			std::cout << m_name << " punches " << target->GetName() << "...\n";
+			std::cout << m_name << " punches " << target->getName() << "...\n";
 			target->ApplyDamage(this, { rand() % 30 + 10, DamageType::MELEE, Element::NONE });
 			break;
 		case 2:
-			std::cout << m_name << " pokes " << target->GetName() << " in the eye with his wand...\n";
+			std::cout << m_name << " pokes " << target->getName() << " in the eye with his wand...\n";
 			target->ApplyDamage(this, { rand() % 30 + 5, DamageType::MELEE, Element::NONE });
 			break;
 		case 3:
-			std::cout << m_name << " stares menacingly at " << target->GetName() << "...it has no effect...\n";
+			std::cout << m_name << " stares menacingly at " << target->getName() << "...it has no effect...\n";
 			break;
 		case 4:
 			std::cout << m_name << " looks scared...\n";

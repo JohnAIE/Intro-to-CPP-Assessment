@@ -45,48 +45,50 @@ public:
 
 	typedef std::vector<Creature*> TargetList;
 	typedef tweeny::tween<int, int> PositionTween;
+	typedef tweeny::tween<int> ShakeTween;
 	typedef tweeny::tween<unsigned char, unsigned char, unsigned char> TintTween;
 
 	Creature(const std::string& portrait);
 	virtual ~Creature();
 
-	void Tick(float deltaTime);
-	virtual void Update(Arena& arena, TargetList& targetList) = 0;
-	virtual void Draw();
-	virtual void ApplyDamage(Arena& arena, Creature* attacker, const DamageInfo& info);
+	// Called once per frame to update the creature's state
+	void tick(float deltaTime);
+	virtual void makeDecisions(Arena& arena, TargetList& targetList) = 0;
+	virtual void draw();
+	virtual void applyDamage(Arena& arena, Creature* attacker, const DamageInfo& info);
 
-	const std::string& GetName()
+	const std::string& getName()
 	{
 		return m_name;
 	}
 
-	int GetHealth()
+	int getHealth()
 	{
 		return m_health;
 	}
 
-	bool IsDead()
+	bool isDead()
 	{
 		return m_health <= 0;
 	}
 
-	Creature* AddPrefix(const std::string& prefix)
+	Creature* addPrefix(const std::string& prefix)
 	{
 		m_name = prefix + " " + m_name;
 		return this;
 	}
 
-	Vector2 GetPosition()
-	{
-		return m_position;
-	}
-
-	Vector2 GetSize()
+	Vector2 getSize()
 	{
 		return m_size;
 	}
 
-	void SetPosition(int x, int y)
+	Vector2 getPosition()
+	{
+		return m_position;
+	}
+
+	void setPosition(int x, int y)
 	{
 		m_position.x = x;
 		m_position.y = y;
@@ -94,23 +96,19 @@ public:
 	}
 
 	template<typename EasingT>
-	PositionTween& MoveTo(int x, int y, float time, EasingT easing = tweeny::easing::linear)
+	PositionTween& moveTo(int x, int y, float time, EasingT easing = tweeny::easing::linear)
 	{
-		//tweeny::from(0).to(1).during(int(time * 1000)).via(easing).onStep([=](auto& tween, float t)
-		//	{
-		//		
-		//	});
 		m_moveTween = tweeny::from(int(m_position.x), int(m_position.y)).to(x, y).during(int(time * 1000)).via(easing);
 		return m_moveTween;
 	}
 
-	tweeny::tween<int>& Shake(int amount, float duration)
+	ShakeTween& shake(int amount, float duration)
 	{
 		m_shakeTween = tweeny::from(amount).to(0).during(int(duration * 1000));
 		return m_shakeTween;
 	}
 
-	TintTween& Flash(Color color, float duration)
+	TintTween& flash(Color color, float duration)
 	{
 		m_tintTween = tweeny::from(m_tint.r, m_tint.g, m_tint.b)
 			.to(color.r, color.g, color.b)
@@ -120,20 +118,11 @@ public:
 		return m_tintTween;
 	}
 	
-	// MoveTo().Wait().Action().RotateTo().RotateBy()...
-
-	// PunchAndReturn()
-	// Shake()
-	// Flash()
-	// Squash()
-	// Flip()
-
-
 protected:
-	// Data
-	int m_health { 100 };
-	int m_maxHealth { 100 };
+	// State / Data
 	std::string m_name;
+	int m_health { 100 };
+	int m_maxHealth { 100 };	
 
 	// Appearance
 	Texture2D m_portrait;
@@ -141,6 +130,7 @@ protected:
 	Color m_bgColor = GRAY;
 	Color m_outlineColor = YELLOW;	
 
+	// Visual state
 	Vector2 m_position { 100, 100 };
 	Vector2 m_prevPosition;
 	Vector2 m_shakeOffset { 0, 0 };
@@ -151,11 +141,9 @@ protected:
 	Vector2 m_walkOffset{ 0, 0 };
 	float m_walkCycle { 0 };
 
-	// Animation
-	std::queue<tweeny::tween<float>> m_tweens;
-
+	// Animation tweens
 	PositionTween m_moveTween;
-	tweeny::tween<int> m_shakeTween;
+	ShakeTween m_shakeTween;
 	TintTween m_tintTween;
 };
 

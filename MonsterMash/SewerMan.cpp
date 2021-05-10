@@ -18,7 +18,7 @@ void SewerMan::Update(TargetList& targetList)
 		Creature* target = targetList[rand() % targetList.size()];
 		if (target != this)
 		{
-			std::cout << m_name << " Sewage Blasts " << target->GetName() << " with N.Y.C Sewage Cannon!\n";
+			std::cout << m_name << " Sewage Blasts " << target->getName() << " with N.Y.C Sewage Cannon!\n";
 			target->ApplyDamage(this, { 25 + rand() % 15, DamageType::RANGED, Element::NONE });
 		}
 	}
@@ -26,7 +26,7 @@ void SewerMan::Update(TargetList& targetList)
 
 void SewerMan::ApplyDamage(Creature* attacker, const DamageInfo& info)
 {
-	if (rand() % 5 == 0  && !IsDead())
+	if (rand() % 5 == 0  && !isDead())
 	{
 		std::cout << m_name << " uses sludge wall, nullifying the Damage!\n";
 	}

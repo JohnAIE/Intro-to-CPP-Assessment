@@ -22,7 +22,7 @@ void Menu::Tick(float deltaTime)
 	switch (m_state)
 	{
 	case State::ARENA:
-		m_arena->Tick(deltaTime);
+		m_arena->update(deltaTime);
 		break;
 	default:
 		break;
@@ -53,7 +53,7 @@ void Menu::Draw()
 	}
 	case State::ARENA:
 	{
-		m_arena->Draw();
+		m_arena->draw();
 		break;
 	}
 	default:
@@ -66,9 +66,6 @@ void Menu::Draw()
 		DrawRectangle(0, 0, sw, sh, Color{ 0,0,0,m_fade });
 		EndBlendMode();
 	}
-
-	//GuiButton(Rectangle{}, "Welcome to Monster Mash Ultimate");
-
 }
 
 void Menu::Start()

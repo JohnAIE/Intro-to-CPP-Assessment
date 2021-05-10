@@ -38,7 +38,7 @@ Creature::~Creature()
 	UnloadTexture(m_portrait);
 }
 
-void Creature::Draw()
+void Creature::draw()
 {
 	// Base position
 	int px = m_position.x + m_shakeOffset.x - m_size.x / 2;
@@ -49,14 +49,14 @@ void Creature::Draw()
 	DrawEllipse(px + m_size.x / 2, py + m_size.y + 20, int(m_size.x * 0.55), m_size.y / 8, Color{ 0, 0, 0, 64 });
 	EndBlendMode();
 
-	float saturation = IsDead() ? 0.0f : 1.0f;
+	float saturation = isDead() ? 0.0f : 1.0f;
 
 	// Portrait
 	//rlPushMatrix();
 	Rectangle rect { px + m_walkOffset.x, py + m_walkOffset.y, m_size.x, m_size.y };
 	Rectangle src { 0, 0, m_portrait.width, m_portrait.height };	
 	DrawRectangleGradientV(rect.x + m_walkOffset.x, rect.y + m_walkOffset.y, m_size.x, m_size.y, m_bgColor, BLACK);	
-	DrawTexturePro(m_portrait, src, rect, Vector2{ 0, 0 }, 0, IsDead() ? DARKGRAY : WHITE);
+	DrawTexturePro(m_portrait, src, rect, Vector2{ 0, 0 }, 0, isDead() ? DARKGRAY : WHITE);
 	//rlPopMatrix();
 
 	BeginBlendMode(BlendMode::BLEND_ADDITIVE);
@@ -69,7 +69,7 @@ void Creature::Draw()
 
 	// Name
 	const int nameFontSize = 18;
-	auto& name = GetName();
+	auto& name = getName();
 	int textWidth = MeasureText(name.c_str(), nameFontSize);
 	DrawText(name.c_str(), px + m_size.x / 2 - textWidth / 2, py - nameFontSize - 2, nameFontSize, LIGHTGRAY);
 
@@ -86,14 +86,14 @@ void Creature::Draw()
 						   ColorFromHSV({ healthPercent * 90 + 30, 0.9f * saturation, 0.4f }), ColorFromHSV({ healthPercent * 120 + 30, 0.9f * saturation, 0.9f }));
 }
 
-void Creature::ApplyDamage(Arena& arena, Creature* attacker, const DamageInfo& info)
+void Creature::applyDamage(Arena& arena, Creature* attacker, const DamageInfo& info)
 {
 	std::string damageName = DamageTypeStringLookup[info.type];
 	std::string elementName = ElementStringLookup[info.element];
 
 	std::stringstream txt;
 
-	if (IsDead())
+	if (isDead())
 	{
 		txt << m_name << "'s corpse ";
 	}
@@ -113,7 +113,7 @@ void Creature::ApplyDamage(Arena& arena, Creature* attacker, const DamageInfo& i
 
 	txt
 		<< " damage from "
-		<< attacker->GetName();
+		<< attacker->getName();
 
 	if (m_health > 0 && m_health - info.amount <= 0)
 	{
@@ -130,18 +130,18 @@ void Creature::ApplyDamage(Arena& arena, Creature* attacker, const DamageInfo& i
 
 	m_health -= info.amount;
 
-	Shake(10, 0.5f);
-	Flash(Color{ 128, 128, 128 }, 0.5f);
+	shake(10, 0.5f);
+	flash(Color{ 128, 128, 128 }, 0.5f);
 
 	if (attacker == this)
 	{
 		txt << "\n" << m_name << " hurt itself in it's confusion...";
 	}
 
-	arena.Log(txt.str());
+	arena.log(txt.str());
 }
 
-void Creature::Tick(float deltaTime)
+void Creature::tick(float deltaTime)
 {
 	if (m_moveTween.duration() > 0)
 	{

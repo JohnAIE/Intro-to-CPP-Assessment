@@ -30,19 +30,19 @@ void Frog::Update(TargetList& targetlist)
 		int choice = rand() % 3;
 		if (choice == 0)
 		{
-			std::cout << m_name << " tounge punches " << target->GetName() << " in its fart box\n";
+			std::cout << m_name << " tounge punches " << target->getName() << " in its fart box\n";
 
 			target->ApplyDamage(this, { 30 + rand() % 20, DamageType::MELEE, Element::NONE });
 		}
 		if (choice == 1)
 		{
-			std::cout << m_name << " gives " << target->GetName() << " a tender loving lick on the side of its cheek \n";
+			std::cout << m_name << " gives " << target->getName() << " a tender loving lick on the side of its cheek \n";
 
 			target->ApplyDamage(this, { 50 + rand() % 10, DamageType::MELEE, Element::NONE });
 		}
 		if (choice == 2)
 		{
-			std::cout << m_name << " gives " << target->GetName() << " the lick of health!\n";
+			std::cout << m_name << " gives " << target->getName() << " the lick of health!\n";
 
 			target->ApplyDamage(this, { -20 + rand() % -10, DamageType::MELEE, Element::NONE });
 		}

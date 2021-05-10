@@ -39,22 +39,22 @@ public:
 	virtual void Update(TargetList& targetList) = 0;
 	virtual void ApplyDamage(Creature* attacker, const DamageInfo& info);
 
-	const std::string& GetName()
+	const std::string& getName()
 	{
 		return m_name;
 	}
 
-	int GetHealth()
+	int getHealth()
 	{
 		return m_health;
 	}
 
-	bool IsDead()
+	bool isDead()
 	{
 		return m_health <= 0;
 	}
 
-	Creature* AddPrefix(const std::string& prefix)
+	Creature* addPrefix(const std::string& prefix)
 	{
 		m_name = prefix + " " + m_name;
 		return this;

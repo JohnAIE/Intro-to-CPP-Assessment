@@ -41,7 +41,7 @@ void Jeffry::Update(TargetList& targetList)
 			}
 		}
 		Element elementType = (Element)(rand() % (int)Element::CAPTAIN_PLANET + 1);
-		std::cout << m_name << " death stares " << target->GetName() << "\n";
+		std::cout << m_name << " death stares " << target->getName() << "\n";
 		target->ApplyDamage(this, { 20 + rand() % 40, DamageType::MAGIC, elementType });
 	}
 }
@@ -52,7 +52,7 @@ void Jeffry::ApplyDamage(Creature* attacker, const DamageInfo& info)
 	if (info.element == Element::WIND)
 	{
 		DuplacateInfo.amount = 0;
-		std::cout << attacker->GetName() << "'s wind attack is kinda annoying" << "\n";
+		std::cout << attacker->getName() << "'s wind attack is kinda annoying" << "\n";
 		Creature::ApplyDamage(attacker, DuplacateInfo);
 	}
 	else if (m_bubbleOfSafteyActive)
@@ -69,25 +69,25 @@ void Jeffry::ApplyDamage(Creature* attacker, const DamageInfo& info)
 	else if(info.element == Element::FIRE)
 	{
 		DuplacateInfo.amount /= 5;
-		std::cout << attacker->GetName() << "'s fire attack is super unaffective" << "\n";
+		std::cout << attacker->getName() << "'s fire attack is super unaffective" << "\n";
 		Creature::ApplyDamage(attacker, DuplacateInfo);
 	}
 	else if (info.element == Element::EARTH)
 	{
 		DuplacateInfo.amount /= 2;
-		std::cout << attacker->GetName() << "'s earth attack is a little unaffective" << "\n";
+		std::cout << attacker->getName() << "'s earth attack is a little unaffective" << "\n";
 		Creature::ApplyDamage(attacker, DuplacateInfo);
 	}
 	else if (info.element == Element::ICE)
 	{
 		DuplacateInfo.amount /= 4;
-		std::cout << attacker->GetName() << "'s ice attack is really unaffective" << "\n";
+		std::cout << attacker->getName() << "'s ice attack is really unaffective" << "\n";
 		Creature::ApplyDamage(attacker, DuplacateInfo);
 	}
 	else if (info.element == Element::CAPTAIN_PLANET)
 	{
 		DuplacateInfo.amount /= 10;
-		std::cout << attacker->GetName() << "'s Captain planet damage like does a thing(sort of)" << "\n";
+		std::cout << attacker->getName() << "'s Captain planet damage like does a thing(sort of)" << "\n";
 
 		Creature::ApplyDamage(attacker, DuplacateInfo);
 	}

@@ -25,7 +25,7 @@ void Ogre::Update(TargetList& targetList)
 			return;
 		}
 
-		std::cout << m_name << " attacks " << target->GetName() << " with club...\n";
+		std::cout << m_name << " attacks " << target->getName() << " with club...\n";
 
 		target->ApplyDamage(this, { 40 + rand() % 20, DamageType::MELEE, Element::NONE });
 	}

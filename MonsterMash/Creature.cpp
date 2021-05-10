@@ -33,7 +33,7 @@ void Creature::ApplyDamage(Creature* attacker, const DamageInfo& info)
 	std::string damageName = DamageTypeStringLookup[info.type];
 	std::string elementName = ElementStringLookup[info.element];
 
-	if (IsDead())
+	if (isDead())
 	{
 		std::cout << m_name << "'s corpse ";
 	}
@@ -53,7 +53,7 @@ void Creature::ApplyDamage(Creature* attacker, const DamageInfo& info)
 
 	std::cout 
 			  << " damage from " 
-			  << attacker->GetName() << "\n";			
+			  << attacker->getName() << "\n";			
 
 	if (m_health > 0 && m_health - info.amount <= 0)
 	{

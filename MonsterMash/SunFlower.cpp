@@ -16,7 +16,7 @@ void SunFlower::Update(TargetList& targetList)
 			Creature* target = targetList[rand() % targetList.size()];
 			if (target != this)
 			{
-				std::cout << m_name << " danced around " << target->GetName() << "...\n";
+				std::cout << m_name << " danced around " << target->getName() << "...\n";
 				target->ApplyDamage(this, { 10, DamageType::MELEE, Element::EARTH });
 			}
 		}

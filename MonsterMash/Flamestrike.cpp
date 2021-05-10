@@ -23,7 +23,7 @@ void Flamestrike::Update(TargetList& targetList)
 
 		
 
-		std::cout << m_name << "asks the" << target->GetName() << " to";
+		std::cout << m_name << "asks the" << target->getName() << " to";
 
 		int choice = rand() % 5;
 		if (choice == 0)

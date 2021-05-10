@@ -66,28 +66,28 @@ void ShadowKnight::Attack(TargetList & targetList)
 		}
 		count++;
 	} 
-	while (target->IsDead());
+	while (target->isDead());
 
 	int dice = rand() % 100;
 	if (dice < 1)
 	{
-		cout << m_name << " uses infernal powers to steal " << target->GetName() << "'s soul\n";
-		m_health += target->GetHealth();
+		cout << m_name << " uses infernal powers to steal " << target->getName() << "'s soul\n";
+		m_health += target->getHealth();
 		target->ApplyDamage(this, { 10000, DamageType::MAGIC, Element::NONE });
 	}
 	else if (dice < 25)
 	{
-		cout << m_name << " casts a ball of fire at " << target->GetName() << "\n";
+		cout << m_name << " casts a ball of fire at " << target->getName() << "\n";
 		target->ApplyDamage(this, { 40, DamageType::MAGIC, Element::FIRE });
 	}
 	else if (dice < 50)
 	{
-		cout << m_name << " chills " << target->GetName() << "with an icy grip\n";
+		cout << m_name << " chills " << target->getName() << "with an icy grip\n";
 		target->ApplyDamage(this, { 30, DamageType::MELEE, Element::ICE });
 	}
 	else
 	{
-		cout << m_name << " attacks " << target->GetName() << endl;
+		cout << m_name << " attacks " << target->getName() << endl;
 		target->ApplyDamage(this, { 25, DamageType::MELEE, Element::NONE });
 	}
 }
@@ -113,7 +113,7 @@ int ShadowKnight::GetStrategy(TargetList & targetList)
 	int livingFighters = 0;
 	for (auto f : targetList)
 	{
-		if (!f->IsDead())
+		if (!f->isDead())
 		{
 			livingFighters++;
 		}

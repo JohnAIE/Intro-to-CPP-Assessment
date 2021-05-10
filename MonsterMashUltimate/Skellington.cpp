@@ -14,32 +14,32 @@ Skellington::~Skellington()
 
 }
 
-void Skellington::Update(Arena& arena, TargetList& targetList)
+void Skellington::makeDecisions(Arena& arena, TargetList& targetList)
 {
 	Creature* target = targetList[GetRandomValue(0, targetList.size() - 1)];
 
-	Vector2 originalPos = GetPosition();
+	Vector2 originalPos = getPosition();
 
 	if (target != this)
 	{
-		arena.DelayedAction(1.0f, [&arena, target, this]()
+		arena.delayedAction(1.0f, [&arena, target, this]()
 			{
-				Vector2 dir = Vector2Subtract(target->GetPosition(), GetPosition());
+				Vector2 dir = Vector2Subtract(target->getPosition(), getPosition());
 				float len = Vector2Length(dir);
-				len = len - target->GetSize().x;
+				len = len - target->getSize().x;
 				dir = Vector2Scale(Vector2Normalize(dir), len);
 
-				Vector2 pos = Vector2Add(GetPosition(), dir);
+				Vector2 pos = Vector2Add(getPosition(), dir);
 
-				MoveTo(pos.x, pos.y, 0.5f, tweeny::easing::backInOut);
+				moveTo(pos.x, pos.y, 0.5f, tweeny::easing::backInOut);
 
 				return true;
 			});
 	}
 
-	arena.DelayedAction(1.4f, [&arena, target, this]()
+	arena.delayedAction(1.4f, [&arena, target, this]()
 		{
-			Shake(5, 0.5f);
+			shake(5, 0.5f);
 
 			DamageInfo damage =
 			{
@@ -48,23 +48,23 @@ void Skellington::Update(Arena& arena, TargetList& targetList)
 				Element::NONE,
 			};
 
-			target->ApplyDamage(arena, this, damage);
+			target->applyDamage(arena, this, damage);
 
 			return true;
 		});
 
-	arena.DelayedAction(2.5f, [&arena, target, this, originalPos]()
+	arena.delayedAction(2.5f, [&arena, target, this, originalPos]()
 		{
-			Vector2 pos = target->GetPosition();
-			MoveTo(originalPos.x, originalPos.y, 1.0f, tweeny::easing::quadraticInOut);
+			Vector2 pos = target->getPosition();
+			moveTo(originalPos.x, originalPos.y, 1.0f, tweeny::easing::quadraticInOut);
 
 			return true;
 		});
 
 
-	arena.DelayedAction(4.0f, [&arena, target, this]()
+	arena.delayedAction(4.0f, [&arena, target, this]()
 		{
-			arena.CreatureEndTurn();
+			arena.creatureEndTurn();
 			return true;
 		});	
 }

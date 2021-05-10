@@ -8,7 +8,7 @@ public:
 	Skellington();
 	virtual ~Skellington();
 
-	virtual void Update(Arena& arena, TargetList& targetList);
+	virtual void makeDecisions(Arena& arena, TargetList& targetList) override;
 
 protected:
 

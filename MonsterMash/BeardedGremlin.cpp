@@ -20,17 +20,17 @@ void BeardedGremlin::Update(TargetList& targetList)
 		for (int i = 0; i < targetList.size(); i++)
 		{			
 			Creature* target = targetList[i];
-			if (target->GetHealth() > mostHealth)
+			if (target->getHealth() > mostHealth)
 			{
-				mostHealth = target->GetHealth();
+				mostHealth = target->getHealth();
 			}			
 		}
 		for (int i = 0; i < targetList.size(); i++)
 		{
 			Creature* target = targetList[i];
-			if (target->GetHealth() == mostHealth)
+			if (target->getHealth() == mostHealth)
 			{
-				std::cout << m_name << " punches " << target->GetName() << " with its fists...\n";
+				std::cout << m_name << " punches " << target->getName() << " with its fists...\n";
 				target->ApplyDamage(this, { 50, DamageType::MELEE, Element::NONE });
 			}
 		}
@@ -41,7 +41,7 @@ void BeardedGremlin::Update(TargetList& targetList)
 
 void BeardedGremlin::ApplyDamage(Creature* attacker, const DamageInfo& info)
 {
-	if (rand() % 3 == 0 && !IsDead())
+	if (rand() % 3 == 0 && !isDead())
 	{
 		std::cout << m_name << " dodges the attack!\n";
 	}

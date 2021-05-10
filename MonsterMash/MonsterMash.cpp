@@ -55,7 +55,7 @@ int main()
 	for (Creature* creature : creatureList)
 	{
 		sleep(1.5f);
-		std::cout << creature->GetName() << "\n";		
+		std::cout << creature->getName() << "\n";		
 	}
 
 	for (int i = 0; i < 3; i++)
@@ -77,8 +77,8 @@ int main()
 		std::vector<Creature*> creatureListCopy = creatureList;
 		for (Creature* creature : creatureListCopy)
 		{
-			std::cout << creature->GetName() << "\t\t";
-			if (creature->IsDead())
+			std::cout << creature->getName() << "\t\t";
+			if (creature->isDead())
 			{
 				std::cout << "dead\t\t";
 			}
@@ -86,7 +86,7 @@ int main()
 			{
 				std::cout << "alive\t\t";
 			}
-			std::cout << creature->GetHealth() << "\n";
+			std::cout << creature->getHealth() << "\n";
 		}
 		creatureList = creatureListCopy;
 
@@ -96,7 +96,7 @@ int main()
 
 		for (Creature* creature : creatureList)
 		{
-			if (!creature->IsDead())
+			if (!creature->isDead())
 			{
 				creature->Update(creatureList);
 				sleep(3.5f);
@@ -108,7 +108,7 @@ int main()
 
 		if (liveCount == 1 && lastAlive)
 		{
-			std::cout << "\nAll other creatures are dead, " << lastAlive->GetName() << " is the WINNER!\n\n";
+			std::cout << "\nAll other creatures are dead, " << lastAlive->getName() << " is the WINNER!\n\n";
 			std::cout << "Thanks for watching!\n\n";
 			break;
 		}

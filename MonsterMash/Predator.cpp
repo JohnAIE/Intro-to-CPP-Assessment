@@ -52,7 +52,7 @@ void Predator::Update(TargetList & targetList)
 			return;
 		}
 
-		std::cout << m_name << " attacks " << target->GetName() << " with wrist blades ... \n";
+		std::cout << m_name << " attacks " << target->getName() << " with wrist blades ... \n";
 
 		if (m_invisible == false)
 		{

@@ -50,8 +50,8 @@ void Glitch::Update(TargetList & targetList)
 	if (rand() % 100 < 15)
 	{
 		int targ = rand() % targetList.size();
-		std::cout << targetList[targ]->GetName() << " implodes, turning into a jumble of distorted characters!/n";
-		int h = targetList[targ]->GetHealth();
+		std::cout << targetList[targ]->getName() << " implodes, turning into a jumble of distorted characters!/n";
+		int h = targetList[targ]->getHealth();
 		targetList[targ] = new Glitch();
 	}
 }
@@ -61,7 +61,7 @@ void Glitch::ApplyDamage(Creature* attacker, const DamageInfo& info)
 	std::string damageName = DTypeStringLookup[info.type];
 	std::string elementName = EStringLookup[info.element];
 
-	if (IsDead())
+	if (isDead())
 	{
 		std::cout << m_name << "'s corpse ";
 	}
@@ -81,15 +81,15 @@ void Glitch::ApplyDamage(Creature* attacker, const DamageInfo& info)
 
 	std::cout
 		<< " damage from "
-		<< attacker->GetName() << "\n";
+		<< attacker->getName() << "\n";
 
 	if (m_health > 0 && m_health - info.amount <= 0)
 	{
 		if (m_health - info.amount < -m_maxHealth)
 		{
 			std::cout << m_name << " collapses into raw bits!\n";
-			std::cout << attacker->GetName() << " starts imploding, turning into a jumble of distorted characters!/n";
-			int h = attacker->GetHealth();
+			std::cout << attacker->getName() << " starts imploding, turning into a jumble of distorted characters!/n";
+			int h = attacker->getHealth();
 			attacker = new Glitch();
 		}
 		else

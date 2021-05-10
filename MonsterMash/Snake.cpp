@@ -19,7 +19,7 @@ void Snake::Update(TargetList& targetList)
 		Creature* target = targetList[rand() % targetList.size()];
 		if (target != this)
 		{
-			std::cout << m_name << " bites " << target->GetName() << " with fangs...\n";
+			std::cout << m_name << " bites " << target->getName() << " with fangs...\n";
 			target->ApplyDamage(this, { 15, DamageType::MELEE, Element::NONE });
 		}
 	}
@@ -27,7 +27,7 @@ void Snake::Update(TargetList& targetList)
 
 void Snake::ApplyDamage(Creature* attacker, const DamageInfo& info)
 {
-	if (rand() % 2 == 0 && !IsDead())
+	if (rand() % 2 == 0 && !isDead())
 	{
 		std::cout << m_name << " dodges the attack!\n";
 	}

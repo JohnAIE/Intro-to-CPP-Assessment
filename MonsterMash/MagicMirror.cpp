@@ -21,7 +21,7 @@ void MagicMirror::Update(TargetList& targetList)
 		Creature* target = targetList[rand() % targetList.size()];
 		if (target != this && target)
 		{
-			std::cout << m_name << " attacks " << target->GetName() << " with light beam...\n";
+			std::cout << m_name << " attacks " << target->getName() << " with light beam...\n";
 
 			target->ApplyDamage(this, { 10 + rand() % m_bonusDamage, DamageType::RANGED, Element::FIRE });	
 		}
